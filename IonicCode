@@ -1,0 +1,60 @@
+#Esse codigo é usado no computador para a Câmera Ionic 3 captar a imagem e atraves da biblioteca data time
+#salvar com o data do dia que fora tirado a foto
+import cv2 
+
+from datetime import datetime 
+
+import serial,time 
+
+ 
+
+def ler_bit(): 
+
+    porta = '/COM4' 
+    baud_rate = 9600 
+
+    try: 
+
+        Obj_porta = serial.Serial(porta, baud_rate) 
+        valor = Obj_porta.read() 
+        Obj_porta.close() 
+
+        return valor 
+
+    except serial.SerialException: 
+
+        print ("ERRO: Verifique se há algum dispositivo conectado na porta!") 
+
+
+def main(args): 
+
+    camera_port = 0  
+    camera = cv2.VideoCapture(camera_port, cv2.CAP_DSHOW) 
+    now = datetime.now() 
+    data = "{} {} {} {} {} {}".format(now.day,now.month,now.year,now.hour,now.minute,now.second) 
+    file = "D:/projeto integrador/{}.png".format(data) 
+
+    retval, img = camera.read() 
+    cv2.imshow('Foto', img) 
+    cv2.imwrite(file, img) 
+    emloop = 0 
+
+    cv2.destroyAllWindows() 
+    camera.release() 
+
+    return 0 
+
+ 
+
+def tirar_foto(): 
+
+    import sys 
+    main(sys.argv) 
+    
+
+if _name_ == '_main_': 
+
+    a = ler_bit() 
+    if a == b"c": 
+
+        tirar_foto()
